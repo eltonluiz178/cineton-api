@@ -1,0 +1,78 @@
+spring:
+  application:
+    name: cineton-api
+
+  # ===== BANCO DE DADOS =====
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  # ===== JPA / HIBERNATE =====
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  # ===== FLYWAY =====
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  # ===== RABBITMQ =====
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+    virtual-host: /
+
+  # ===== DEVTOOLS =====
+  devtools:
+    restart:
+      enabled: true
+
+# ===== SERVIDOR =====
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# ===== MINIO =====
+minio:
+  url: ${MINIO_URL}
+  access-key: ${MINIO_ROOT_USER}
+  secret-key: ${MINIO_ROOT_PASSWORD}
+  bucket-name: cineton-files
+  presigned-url-expiry: 60 # minutos
+
+# ===== JWT =====
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000 # 24 horas em milissegundos
+  refresh-expiration: 604800000 # 7 dias em milissegundos
+
+# ===== SPRINGDOC / SWAGGER =====
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+
+# ===== ACTUATOR =====
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      show-details: when-authorized
