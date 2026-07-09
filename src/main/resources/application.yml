@@ -11,14 +11,13 @@ spring:
 
   # ===== JPA / HIBERNATE =====
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: validate
-      # validate = Hibernate só valida se as tabelas existem, quem cria é o Flyway
     show-sql: false
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
 
   # ===== FLYWAY =====
   flyway:
