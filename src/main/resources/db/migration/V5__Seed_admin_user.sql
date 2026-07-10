@@ -6,8 +6,7 @@
 
 INSERT INTO users (
     id,
-    first_name,
-    last_name,
+    name,
     email,
     password,
     role,
@@ -16,7 +15,6 @@ INSERT INTO users (
 )
 VALUES (
            gen_random_uuid(),
-           'System',
            'Administrator',
            'admin@cineton.com',
            '$2a$10$M9z9Hf8nQJ7w2x4v0QKq7.2X6cA5Y8xYx4n4XQ7M5tO3A1QK8r6kG',

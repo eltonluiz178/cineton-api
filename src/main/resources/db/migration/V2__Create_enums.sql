@@ -11,25 +11,6 @@
 -- ====================================================================================================
 
 -- =====================================================================================
--- USER ROLE
--- =====================================================================================
-
-CREATE TYPE user_role AS ENUM (
-    'ADMIN',
-    'EMPLOYEE',
-    'CUSTOMER'
-);
-
-COMMENT ON TYPE user_role IS
-'Define o perfil de acesso do usuário na aplicação.';
-
-COMMENT ON TYPE user_role IS
-'ADMIN     -> Administrador do sistema.
- EMPLOYEE  -> Funcionário do cinema.
- CUSTOMER  -> Cliente da plataforma.';
-
-
--- =====================================================================================
 -- FILM STATUS
 -- =====================================================================================
 
@@ -41,6 +22,20 @@ CREATE TYPE film_status AS ENUM (
 
 COMMENT ON TYPE film_status IS
 'Status atual de exibição do filme.';
+
+
+-- =====================================================================================
+-- USER ROLE
+-- =====================================================================================
+
+CREATE TYPE user_role AS ENUM (
+    'ADMIN',
+    'EMPLOYEE',
+    'CUSTOMER'
+);
+
+COMMENT ON TYPE user_role IS
+'Define o perfil de acesso do usuário na aplicação.';
 
 
 -- =====================================================================================
@@ -66,6 +61,7 @@ COMMENT ON TYPE session_status IS
 CREATE TYPE session_seat_status AS ENUM (
     'AVAILABLE',
     'RESERVED',
+    'OCCUPIED',
     'BLOCKED'
 );
 
@@ -116,3 +112,17 @@ CREATE TYPE payment_method AS ENUM (
 
 COMMENT ON TYPE payment_method IS
 'Métodos de pagamento suportados pelo sistema.';
+
+
+-- =====================================================================================
+-- TICKET TYPE
+-- =====================================================================================
+
+CREATE TYPE ticket_type AS ENUM (
+    'NORMAL',
+    'HALF',
+    'FREE'
+);
+
+COMMENT ON TYPE ticket_type IS
+'Tipos de ingresso do sistema.';

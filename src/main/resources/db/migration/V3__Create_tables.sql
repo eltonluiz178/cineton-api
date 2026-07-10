@@ -11,8 +11,7 @@
 CREATE TABLE users (
                        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
-                       first_name VARCHAR(100) NOT NULL,
-                       last_name VARCHAR(100) NOT NULL,
+                       name VARCHAR(100) NOT NULL,
 
                        email VARCHAR(255) NOT NULL,
 
@@ -28,8 +27,7 @@ COMMENT ON TABLE users IS
 'Usuários da plataforma (clientes, funcionários e administradores).';
 
 COMMENT ON COLUMN users.id IS 'Identificador único.';
-COMMENT ON COLUMN users.first_name IS 'Primeiro nome.';
-COMMENT ON COLUMN users.last_name IS 'Sobrenome.';
+COMMENT ON COLUMN users.name IS 'Nome.';
 COMMENT ON COLUMN users.email IS 'E-mail utilizado para login.';
 COMMENT ON COLUMN users.password IS 'Senha criptografada (BCrypt).';
 COMMENT ON COLUMN users.role IS 'Perfil de acesso.';
@@ -267,16 +265,10 @@ CREATE TABLE session_seats (
 
                                seat_id UUID NOT NULL,
 
-                               price NUMERIC(10,2) NOT NULL,
-
                                status session_seat_status NOT NULL DEFAULT 'AVAILABLE',
 
                                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-                               updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-
-                               CONSTRAINT chk_session_seat_price
-                                   CHECK (price >= 0)
-
+                               updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 COMMENT ON TABLE session_seats IS
@@ -285,7 +277,6 @@ COMMENT ON TABLE session_seats IS
 COMMENT ON COLUMN session_seats.id IS 'Identificador único.';
 COMMENT ON COLUMN session_seats.session_id IS 'Sessão à qual o assento pertence.';
 COMMENT ON COLUMN session_seats.seat_id IS 'Assento físico.';
-COMMENT ON COLUMN session_seats.price IS 'Preço do ingresso para este assento.';
 COMMENT ON COLUMN session_seats.status IS 'Status do assento durante a sessão.';
 COMMENT ON COLUMN session_seats.created_at IS 'Data de criação.';
 COMMENT ON COLUMN session_seats.updated_at IS 'Última atualização.';
@@ -302,19 +293,19 @@ CREATE TABLE reservations (
 
                               user_id UUID NOT NULL,
 
-                              session_seat_id UUID NOT NULL,
-
                               reservation_code VARCHAR(20) NOT NULL,
 
-                              reserved_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-
-                              expires_at TIMESTAMPTZ,
+                              total NUMERIC(10,2) NOT NULL DEFAULT 0,
 
                               status reservation_status NOT NULL DEFAULT 'PENDING_PAYMENT',
 
+                              reserved_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                              expires_at TIMESTAMPTZ,
                               created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-                              updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+                              updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
+                              CONSTRAINT chk_reservation_total
+                                  CHECK (total >= 0)
 );
 
 COMMENT ON TABLE reservations IS
@@ -322,13 +313,45 @@ COMMENT ON TABLE reservations IS
 
 COMMENT ON COLUMN reservations.id IS 'Identificador único.';
 COMMENT ON COLUMN reservations.user_id IS 'Cliente que realizou a reserva.';
-COMMENT ON COLUMN reservations.session_seat_id IS 'Assento reservado.';
 COMMENT ON COLUMN reservations.reservation_code IS 'Código público da reserva.';
 COMMENT ON COLUMN reservations.reserved_at IS 'Momento em que a reserva foi criada.';
 COMMENT ON COLUMN reservations.expires_at IS 'Data de expiração da reserva.';
 COMMENT ON COLUMN reservations.status IS 'Status da reserva.';
 COMMENT ON COLUMN reservations.created_at IS 'Data de criação.';
 COMMENT ON COLUMN reservations.updated_at IS 'Última atualização.';
+
+
+
+-- =====================================================================================
+-- RESERVATION SEATS
+-- =====================================================================================
+
+CREATE TABLE reservation_seats (
+                                   id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+                                   reservation_id    UUID NOT NULL,
+
+                                   session_seat_id   UUID NOT NULL,
+
+                                   ticket_type       ticket_type NOT NULL DEFAULT 'NORMAL',
+
+                                   unit_price        NUMERIC(10,2) NOT NULL,
+
+                                   created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+                                   CONSTRAINT chk_reservation_seat_price
+                                       CHECK (unit_price >= 0)
+);
+
+COMMENT ON TABLE reservation_seats IS
+'Assentos vinculados a uma reserva, com tipo de ingresso e preço unitário.';
+
+COMMENT ON COLUMN reservation_seats.id IS 'Identificador único.';
+COMMENT ON COLUMN reservation_seats.reservation_id IS 'Reserva à qual o assento pertence.';
+COMMENT ON COLUMN reservation_seats.session_seat_id IS 'Assento da sessão reservado.';
+COMMENT ON COLUMN reservation_seats.ticket_type IS 'Tipo de ingresso: NORMAL, HALF ou FREE.';
+COMMENT ON COLUMN reservation_seats.unit_price IS 'Preço unitário calculado no momento da reserva.';
+COMMENT ON COLUMN reservation_seats.created_at IS 'Data de criação.';
 
 
 
