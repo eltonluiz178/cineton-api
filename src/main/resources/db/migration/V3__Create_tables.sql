@@ -302,7 +302,7 @@ CREATE TABLE reservations (
                               reserved_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                               expires_at TIMESTAMPTZ,
                               created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-                              updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+                              updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
                               CONSTRAINT chk_reservation_total
                                   CHECK (total >= 0)
