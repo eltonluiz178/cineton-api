@@ -265,16 +265,10 @@ CREATE TABLE session_seats (
 
                                seat_id UUID NOT NULL,
 
-                               price NUMERIC(10,2) NOT NULL,
-
                                status session_seat_status NOT NULL DEFAULT 'AVAILABLE',
 
                                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-                               updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-
-                               CONSTRAINT chk_session_seat_price
-                                   CHECK (price >= 0)
-
+                               updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 COMMENT ON TABLE session_seats IS
@@ -283,7 +277,6 @@ COMMENT ON TABLE session_seats IS
 COMMENT ON COLUMN session_seats.id IS 'Identificador único.';
 COMMENT ON COLUMN session_seats.session_id IS 'Sessão à qual o assento pertence.';
 COMMENT ON COLUMN session_seats.seat_id IS 'Assento físico.';
-COMMENT ON COLUMN session_seats.price IS 'Preço do ingresso para este assento.';
 COMMENT ON COLUMN session_seats.status IS 'Status do assento durante a sessão.';
 COMMENT ON COLUMN session_seats.created_at IS 'Data de criação.';
 COMMENT ON COLUMN session_seats.updated_at IS 'Última atualização.';
