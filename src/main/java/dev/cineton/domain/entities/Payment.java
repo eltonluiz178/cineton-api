@@ -35,7 +35,7 @@ public class Payment {
     @Column(name = "payment_method", nullable = false, columnDefinition = "payment_method")
     private PaymentMethod paymentMethod;
 
-    @Column(name = "transcation_id", length = 255)
+    @Column(name = "transaction_id", length = 255)
     private String transcationId;
 
     @Column(name = "paid_at", nullable = false)
