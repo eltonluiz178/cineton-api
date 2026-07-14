@@ -5,7 +5,9 @@ import dev.cineton.domain.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -32,6 +34,7 @@ public class Payment {
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "payment_method", nullable = false, columnDefinition = "payment_method")
     private PaymentMethod paymentMethod;
 
@@ -42,6 +45,7 @@ public class Payment {
     private OffsetDateTime paidAt;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "status", nullable = false, columnDefinition = "payment_status")
     private PaymentStatus status;
 
