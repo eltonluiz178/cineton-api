@@ -1,6 +1,7 @@
 package dev.cineton.security;
 
 import dev.cineton.domain.entities.User;
+import dev.cineton.domain.enums.UserStatus;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,5 +28,10 @@ public class UserPrincipal implements UserDetails {
     @Override
     public String getUsername() {
         return user.getEmail();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return user.getStatus() == UserStatus.ACTIVE;
     }
 }
