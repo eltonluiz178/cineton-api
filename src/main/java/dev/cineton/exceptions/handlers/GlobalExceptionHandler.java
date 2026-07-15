@@ -7,6 +7,7 @@ import dev.cineton.exceptions.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,6 +33,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleCreateEntityException(CreateEntityException ex, HttpServletRequest request) {
         return buildErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, "Create Entity Error",
                 ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ErrorResponse> handleDisabledException(DisabledException ex, HttpServletRequest request) {
+        return buildErrorResponse(
+                HttpStatus.FORBIDDEN, "Account Disabled",
+                "Conta não ativada. Verifique seu email para confirmar o cadastro.", request);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
