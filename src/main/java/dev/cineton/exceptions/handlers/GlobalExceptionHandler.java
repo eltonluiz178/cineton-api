@@ -7,10 +7,12 @@ import dev.cineton.exceptions.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -30,6 +32,34 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleCreateEntityException(CreateEntityException ex, HttpServletRequest request) {
         return buildErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, "Create Entity Error",
                 ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationException(
+            MethodArgumentNotValidException ex,
+            HttpServletRequest request) {
+
+        // pega só a primeira mensagem de erro de validação
+        String message = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, "Validation Error", message, request);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGenericException(
+            Exception ex,
+            HttpServletRequest request) {
+
+        return buildErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal Server Error",
+                "Ocorreu um erro inesperado",
+                request
+        );
     }
 
     private ResponseEntity<ErrorResponse> buildErrorResponse(HttpStatus status, String title, String message, HttpServletRequest request) {
