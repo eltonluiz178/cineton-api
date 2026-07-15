@@ -24,7 +24,7 @@ public class EmailConfirmation {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "code", nullable = false, columnDefinition = "CHAR(6)")
+    @Column(name = "code", nullable = false)
     private String code;
 
     @Column(name = "expires_at", nullable = false)

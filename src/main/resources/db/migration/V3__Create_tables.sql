@@ -510,7 +510,7 @@ CREATE TABLE email_confirmations
 
     user_id      UUID        NOT NULL,
 
-    code         CHAR(6)     NOT NULL,
+    code         VARCHAR(6)     NOT NULL,
 
     expires_at   TIMESTAMPTZ NOT NULL,
 
