@@ -88,6 +88,13 @@ ALTER TABLE payments
             ON DELETE CASCADE;
 
 
+-- Email Confirmations
+ALTER TABLE email_confirmations
+    ADD CONSTRAINT fk_email_confirmations_user
+        FOREIGN KEY (user_id)
+            REFERENCES users(id)
+            ON DELETE CASCADE;
+
 -- =====================================================================================
 -- UNIQUE CONSTRAINTS
 -- =====================================================================================
