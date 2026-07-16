@@ -1,6 +1,7 @@
 package dev.cineton.domain.entities;
 
 import dev.cineton.domain.enums.UserRole;
+import dev.cineton.domain.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -39,6 +40,11 @@ public class User {
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "role", nullable = false, columnDefinition = "user_role")
     private UserRole role;
+
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "status", nullable = false, columnDefinition = "user_status")
+    private UserStatus status;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
