@@ -1,5 +1,6 @@
 package dev.cineton.controller;
 
+import dev.cineton.dto.request.ConfirmEmailRequest;
 import dev.cineton.dto.request.LoginRequest;
 import dev.cineton.dto.request.RegisterRequest;
 import dev.cineton.dto.response.AuthResponse;
@@ -32,8 +33,13 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "O usuário pode se registrar", description = "Permite que o usuário consiga fazer o próprio registro")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest body) {
-        return ResponseEntity.ok(authService.registerUser(body));
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest body) {
+        return ResponseEntity.accepted().body(authService.registerUser(body));
     }
 
+    @PostMapping("/confirm")
+    @Operation(summary = "Confirma o email do usuário", description = "Atráves do código confirma conta do usuário pelo email")
+    public ResponseEntity<AuthResponse> confirm(@Valid @RequestBody ConfirmEmailRequest body) {
+        return ResponseEntity.ok(authService.confirmEmail(body));
+    }
 }
