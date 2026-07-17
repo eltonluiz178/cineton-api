@@ -5,6 +5,7 @@ import dev.cineton.domain.entities.User;
 import dev.cineton.exceptions.AuthenticationException;
 import dev.cineton.repository.EmailConfirmationRepository;
 import dev.cineton.service.EmailConfirmationService;
+import dev.cineton.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.time.ZoneOffset;
 public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
     private final EmailConfirmationRepository emailConfirmationRepository;
+    private final UserService userService;
 
     @Override
     public EmailConfirmation saveEmailConfirmation(User user, String confirmationCode) {
@@ -50,6 +52,8 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
     @Override
     public EmailConfirmation findByUserEmailAndCodeAndConfirmedAtIsNull(String email, String code) {
+        userService.getUserByEmail(email);
+
         return this.emailConfirmationRepository.findByUserEmailAndCodeAndConfirmedAtIsNull(email, code).orElseThrow(() -> new AuthenticationException("Código inválido ou já utilizado."));
     }
 
