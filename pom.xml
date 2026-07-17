@@ -102,6 +102,12 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <!-- ===== EMAIL ===== -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!-- ===== UTILITÁRIOS ===== -->
         <dependency>
             <groupId>org.projectlombok</groupId>
