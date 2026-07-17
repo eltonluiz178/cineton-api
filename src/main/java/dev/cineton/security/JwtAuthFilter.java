@@ -42,7 +42,20 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     boolean tokenValid = jwtService.isTokenValid(token, user);
 
                     if (tokenValid) {
-                        // 1. Cria o token de autenticação do Spring Security
+
+                        String status = jwtService.extractStatus(token);
+                        String requestUri = request.getRequestURI();
+
+                        if (!status.equals("ACTIVE") && !requestUri.startsWith("/api/auth/")) {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json");
+                            response.getWriter().write("""
+                                        {"status": 403, "error": "Account not confirmed", 
+                                         "message": "Confirme seu email para acessar esta funcionalidade."}
+                                    """);
+                            return;
+                        }
+
                         var authToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
                         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
