@@ -14,6 +14,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     public User getUserByEmail(String email) {
-        return this.userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
+        return this.userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
     }
 }
