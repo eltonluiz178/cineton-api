@@ -4,6 +4,7 @@ import dev.cineton.domain.entities.EmailConfirmation;
 import dev.cineton.domain.entities.User;
 import dev.cineton.domain.enums.UserStatus;
 import dev.cineton.exceptions.AuthenticationException;
+import dev.cineton.exceptions.BusinessException;
 import dev.cineton.messaging.config.RabbitMQConfig;
 import dev.cineton.messaging.events.UserRegisteredEvent;
 import dev.cineton.repository.EmailConfirmationRepository;
@@ -61,7 +62,7 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
         User user = userService.getUserByEmail(userEmail);
 
-        if (user.getStatus() != UserStatus.PENDING) throw new IllegalStateException("Não é possível gerar um código de confirmação para usuários com status diferente de pendente.");
+        if (user.getStatus() != UserStatus.PENDING) throw new BusinessException("Não é possível gerar um código de confirmação para usuários com status diferente de pendente.");
 
         ZoneOffset offset = ZoneId.of("America/Sao_Paulo").getRules().getOffset(java.time.Instant.now());
         OffsetDateTime now = OffsetDateTime.now(offset);

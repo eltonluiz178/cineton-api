@@ -9,6 +9,7 @@ import dev.cineton.dto.request.LoginRequest;
 import dev.cineton.dto.request.RegisterRequest;
 import dev.cineton.dto.response.AuthResponse;
 import dev.cineton.exceptions.AuthenticationException;
+import dev.cineton.exceptions.BusinessException;
 import dev.cineton.exceptions.CreateEntityException;
 import dev.cineton.repository.UserRepository;
 import dev.cineton.infra.security.JwtService;
@@ -76,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = confirmation.getUser();
 
-        if(user.getStatus() != UserStatus.PENDING) throw new IllegalStateException("Não é possível confirmar o email de usuários com status diferente de pendente.");
+        if(user.getStatus() != UserStatus.PENDING) throw new BusinessException("Não é possível confirmar o email de usuários com status diferente de pendente.");
 
         if (confirmation.getExpiresAt().isBefore(OffsetDateTime.now())) {
             throw new AuthenticationException("Código expirado.");
