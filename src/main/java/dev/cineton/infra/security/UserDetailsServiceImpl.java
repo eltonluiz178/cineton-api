@@ -1,4 +1,4 @@
-package dev.cineton.security;
+package dev.cineton.infra.security;
 
 import dev.cineton.domain.entities.User;
 import dev.cineton.repository.UserRepository;

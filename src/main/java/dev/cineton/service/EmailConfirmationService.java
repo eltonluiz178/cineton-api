@@ -8,6 +8,8 @@ public interface EmailConfirmationService {
 
     String codeGenerator();
 
+    String generateEmailConfirmation(String userEmail);
+
     EmailConfirmation findByUserEmailAndCodeAndConfirmedAtIsNull(String email, String code);
 
     void confirmEmail(EmailConfirmation emailConfirmation);

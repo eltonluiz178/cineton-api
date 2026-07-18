@@ -9,17 +9,15 @@ import dev.cineton.dto.request.LoginRequest;
 import dev.cineton.dto.request.RegisterRequest;
 import dev.cineton.dto.response.AuthResponse;
 import dev.cineton.exceptions.AuthenticationException;
+import dev.cineton.exceptions.BusinessException;
 import dev.cineton.exceptions.CreateEntityException;
-import dev.cineton.messaging.config.RabbitMQConfig;
-import dev.cineton.messaging.events.UserRegisteredEvent;
 import dev.cineton.repository.UserRepository;
-import dev.cineton.security.JwtService;
-import dev.cineton.security.UserPrincipal;
+import dev.cineton.infra.security.JwtService;
+import dev.cineton.infra.security.UserPrincipal;
 import dev.cineton.service.AuthService;
 import dev.cineton.service.EmailConfirmationService;
 import dev.cineton.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +33,6 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final UserService userService;
     private final EmailConfirmationService emailConfirmationService;
-    private final RabbitTemplate rabbitTemplate;
 
     @Override
     @Transactional
@@ -54,22 +51,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = this.userRepository.save(newUser);
 
-        String codeConfirmation = this.emailConfirmationService.codeGenerator();
-
-        EmailConfirmation emailConfirmationSaved = this.emailConfirmationService.saveEmailConfirmation(user, codeConfirmation);
-
-        rabbitTemplate.convertAndSend(
-                RabbitMQConfig.EXCHANGE,
-                RabbitMQConfig.USER_REGISTERED_ROUTING_KEY,
-                new UserRegisteredEvent(
-                        user.getEmail(),
-                        user.getName(),
-                        codeConfirmation,
-                        emailConfirmationSaved.getExpiresAt().toString()
-                )
-        );
-
-        return "Enviamos um código de confirmação para o email: " + user.getEmail();
+        return this.emailConfirmationService.generateEmailConfirmation(user.getEmail());
     }
 
     @Override
@@ -93,6 +75,10 @@ public class AuthServiceImpl implements AuthService {
         EmailConfirmation confirmation = emailConfirmationService
                 .findByUserEmailAndCodeAndConfirmedAtIsNull(request.email(), request.code());
 
+        User user = confirmation.getUser();
+
+        if(user.getStatus() != UserStatus.PENDING) throw new BusinessException("Não é possível confirmar o email de usuários com status diferente de pendente.");
+
         if (confirmation.getExpiresAt().isBefore(OffsetDateTime.now())) {
             throw new AuthenticationException("Código expirado.");
         }
@@ -100,7 +86,7 @@ public class AuthServiceImpl implements AuthService {
         confirmation.setConfirmedAt(OffsetDateTime.now());
         emailConfirmationService.confirmEmail(confirmation);
 
-        User user = confirmation.getUser();
+
         user.setStatus(UserStatus.ACTIVE);
         userRepository.save(user);
 

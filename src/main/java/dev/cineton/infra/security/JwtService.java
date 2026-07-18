@@ -1,4 +1,4 @@
-package dev.cineton.security;
+package dev.cineton.infra.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

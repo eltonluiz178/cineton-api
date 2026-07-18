@@ -2,12 +2,14 @@ package dev.cineton.exceptions.handlers;
 
 import dev.cineton.dto.response.ErrorResponse;
 import dev.cineton.exceptions.AuthenticationException;
+import dev.cineton.exceptions.BusinessException;
 import dev.cineton.exceptions.CreateEntityException;
 import dev.cineton.exceptions.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -33,6 +35,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleCreateEntityException(CreateEntityException ex, HttpServletRequest request) {
         return buildErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, "Create Entity Error",
                 ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex, HttpServletRequest request) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, "Business Error",
+                ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAuthorizationDeniedException(AuthorizationDeniedException ex, HttpServletRequest request) {
+        return buildErrorResponse(HttpStatus.FORBIDDEN, "Authorization Denied",
+                "Você não tem permissão para executar esta requisição.", request);
     }
 
     @ExceptionHandler(DisabledException.class)

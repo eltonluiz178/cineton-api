@@ -18,7 +18,7 @@ VALUES (
            gen_random_uuid(),
            'Administrator',
            'admin@cineton.com',
-           '$2a$10$M9z9Hf8nQJ7w2x4v0QKq7.2X6cA5Y8xYx4n4XQ7M5tO3A1QK8r6kG',
+           '$2a$10$TAMnfE8tI4gLuxZRSCK3xu1i3DZB6ZY9aWks/i.w5F6eiRn9kO/7e',
            'ADMIN',
            'ACTIVE',
            NOW(),
