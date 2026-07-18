@@ -35,7 +35,6 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final UserService userService;
     private final EmailConfirmationService emailConfirmationService;
-    private final RabbitTemplate rabbitTemplate;
 
     @Override
     @Transactional
@@ -54,22 +53,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = this.userRepository.save(newUser);
 
-        String codeConfirmation = this.emailConfirmationService.codeGenerator();
-
-        EmailConfirmation emailConfirmationSaved = this.emailConfirmationService.saveEmailConfirmation(user, codeConfirmation);
-
-        rabbitTemplate.convertAndSend(
-                RabbitMQConfig.EXCHANGE,
-                RabbitMQConfig.USER_REGISTERED_ROUTING_KEY,
-                new UserRegisteredEvent(
-                        user.getEmail(),
-                        user.getName(),
-                        codeConfirmation,
-                        emailConfirmationSaved.getExpiresAt().toString()
-                )
-        );
-
-        return "Enviamos um código de confirmação para o email: " + user.getEmail();
+        return this.emailConfirmationService.generateEmailConfirmation(user.getEmail());
     }
 
     @Override

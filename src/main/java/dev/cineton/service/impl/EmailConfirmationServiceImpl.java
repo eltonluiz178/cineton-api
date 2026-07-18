@@ -3,16 +3,21 @@ package dev.cineton.service.impl;
 import dev.cineton.domain.entities.EmailConfirmation;
 import dev.cineton.domain.entities.User;
 import dev.cineton.exceptions.AuthenticationException;
+import dev.cineton.messaging.config.RabbitMQConfig;
+import dev.cineton.messaging.events.UserRegisteredEvent;
 import dev.cineton.repository.EmailConfirmationRepository;
 import dev.cineton.service.EmailConfirmationService;
 import dev.cineton.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -20,6 +25,7 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
     private final EmailConfirmationRepository emailConfirmationRepository;
     private final UserService userService;
+    private final RabbitTemplate rabbitTemplate;
 
     @Override
     public EmailConfirmation saveEmailConfirmation(User user, String confirmationCode) {
@@ -48,6 +54,38 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public String generateEmailConfirmation(String userEmail){
+
+        User user = userService.getUserByEmail(userEmail);
+
+        ZoneOffset offset = ZoneId.of("America/Sao_Paulo").getRules().getOffset(java.time.Instant.now());
+        OffsetDateTime now = OffsetDateTime.now(offset);
+
+        Optional<EmailConfirmation> oldEmailConfirmation = emailConfirmationRepository.findByUserEmail(user.getEmail());
+
+        String newCode = codeGenerator();
+
+        if (oldEmailConfirmation.isPresent()) {
+            emailConfirmationRepository.delete(oldEmailConfirmation.get());
+        }
+
+        EmailConfirmation emailConfirmationSaved = saveEmailConfirmation(user, newCode);
+
+        rabbitTemplate.convertAndSend(
+                RabbitMQConfig.EXCHANGE,
+                RabbitMQConfig.USER_REGISTERED_ROUTING_KEY,
+                new UserRegisteredEvent(
+                        user.getEmail(),
+                        user.getName(),
+                        emailConfirmationSaved.getCode(),
+                        emailConfirmationSaved.getExpiresAt().toString()
+                )
+        );
+
+        return "Solicitação recebida! Um código de confirmação está sendo enviado para o email: " + user.getEmail();
     }
 
     @Override
