@@ -25,7 +25,9 @@ public class JwtService {
 
         return Jwts.builder()
                 .subject(userDetails.getUsername())
+                .claim("username", userDetails.getUsername())
                 .claim("role", userDetails.getAuthorities())
+                .claim("status", ((UserPrincipal) userDetails).getUser().getStatus())
                 .issuedAt(new Date(nowMillis))
                 .expiration(new Date(nowMillis + expiration))
                 .signWith(getSigningKey())
@@ -42,6 +44,15 @@ public class JwtService {
                 .getPayload(); // Retorna o payload
 
         return claims.getSubject();
+    }
+
+    public String extractStatus(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("status", String.class);
     }
 
     // valida se o token pertence ao usuário e não expirou
