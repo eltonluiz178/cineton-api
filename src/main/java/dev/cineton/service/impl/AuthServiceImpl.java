@@ -10,8 +10,6 @@ import dev.cineton.dto.request.RegisterRequest;
 import dev.cineton.dto.response.AuthResponse;
 import dev.cineton.exceptions.AuthenticationException;
 import dev.cineton.exceptions.CreateEntityException;
-import dev.cineton.messaging.config.RabbitMQConfig;
-import dev.cineton.messaging.events.UserRegisteredEvent;
 import dev.cineton.repository.UserRepository;
 import dev.cineton.infra.security.JwtService;
 import dev.cineton.infra.security.UserPrincipal;
@@ -19,7 +17,6 @@ import dev.cineton.service.AuthService;
 import dev.cineton.service.EmailConfirmationService;
 import dev.cineton.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,6 +74,10 @@ public class AuthServiceImpl implements AuthService {
         EmailConfirmation confirmation = emailConfirmationService
                 .findByUserEmailAndCodeAndConfirmedAtIsNull(request.email(), request.code());
 
+        User user = confirmation.getUser();
+
+        if(user.getStatus() != UserStatus.PENDING) throw new IllegalStateException("Não é possível confirmar o email de usuários com status diferente de pendente.");
+
         if (confirmation.getExpiresAt().isBefore(OffsetDateTime.now())) {
             throw new AuthenticationException("Código expirado.");
         }
@@ -84,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
         confirmation.setConfirmedAt(OffsetDateTime.now());
         emailConfirmationService.confirmEmail(confirmation);
 
-        User user = confirmation.getUser();
+
         user.setStatus(UserStatus.ACTIVE);
         userRepository.save(user);
 
