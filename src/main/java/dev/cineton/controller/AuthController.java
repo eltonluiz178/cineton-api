@@ -7,6 +7,7 @@ import dev.cineton.dto.request.ResendCodeRequest;
 import dev.cineton.dto.response.AuthResponse;
 import dev.cineton.service.AuthService;
 import dev.cineton.service.EmailConfirmationService;
+import dev.cineton.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
     private final EmailConfirmationService emailConfirmationService;
+    private final UserService userService;
 
     @PostMapping("/login")
     @Operation(summary = "Realiza login do usuário", description = "Realiza login stateless do usuário a partir do email" +
@@ -49,6 +51,8 @@ public class AuthController {
     @PostMapping("/generate-code")
     @Operation(summary = "Gera código de confirmação", description = "Gera um novo código de confirmação o envia para o email")
     public ResponseEntity<String> confirm(@Valid @RequestBody ResendCodeRequest body){
+        userService.verifyUserAuthenticated(body.email());
+
         return ResponseEntity.accepted().body(emailConfirmationService.generateEmailConfirmation(body.email()));
     }
 }
