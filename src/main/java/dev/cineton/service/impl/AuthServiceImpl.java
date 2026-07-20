@@ -72,6 +72,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public AuthResponse confirmEmail(ConfirmEmailRequest request) {
+
+        userService.verifyUserAuthenticated(request.email());
+
         EmailConfirmation confirmation = emailConfirmationService
                 .findByUserEmailAndCodeAndConfirmedAtIsNull(request.email(), request.code());
 
