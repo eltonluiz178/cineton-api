@@ -36,7 +36,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public List<GenreResponse> findAll() {
-        return genreRepository.findAll().stream().map(genre -> new GenreResponse(genre)).toList();
+        return genreRepository.findAll().stream().map(GenreResponse::new).toList();
     }
 
     @Override
