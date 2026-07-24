@@ -21,7 +21,5 @@ public record CreateFilmRequest(
         @Past(message = "Data de lançamento é inválida")
         LocalDate releaseDate,
 
-        String posterUrl,
-
         String trailerUrl
 ) {}

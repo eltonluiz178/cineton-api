@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public record UpdateFilmRequest(
-        UUID id,
 
         @Size(max = 255, message = "O título deve ter no máximo 255 caracteres")
         String title,
@@ -22,8 +21,6 @@ public record UpdateFilmRequest(
 
         @Past(message = "Data de lançamento é inválida")
         LocalDate releaseDate,
-
-        String posterUrl,
 
         String trailerUrl,
 
