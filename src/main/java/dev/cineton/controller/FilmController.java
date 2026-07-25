@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -59,5 +60,12 @@ public class FilmController {
         filmService.delete(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/poster")
+    @Operation(summary = "Upload do poster", description = "Faz o upload do poster do filme")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE')")
+    public ResponseEntity<FilmResponse> uploadPoster(@PathVariable UUID id, @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(filmService.uploadPoster(id, file));
     }
 }
