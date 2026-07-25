@@ -19,7 +19,33 @@ public record FilmResponse(
         FilmStatus status,
         List<GenreResponse> genres
 ) {
+    // Construtor para filme sem poster criado
     public FilmResponse(Film film) {
-        this(film.getId(), film.getTitle(), film.getSynopsis(), film.getDurationMinutes(), film.getAgeRating(), film.getReleaseDate(), film.getPosterUrl(), film.getTrailerUrl(), film.getStatus(), film.getGenres().stream().map(GenreResponse::new).toList());
+        this(
+                film.getId(),
+                film.getTitle(),
+                film.getSynopsis(),
+                film.getDurationMinutes(),
+                film.getAgeRating(),
+                film.getReleaseDate(),
+                null,
+                film.getTrailerUrl(),
+                film.getStatus(),
+                film.getGenres().stream().map(GenreResponse::new).toList());
+    }
+    // Construtor para filme com poster
+    public FilmResponse(Film film, String posterUrl) {
+        this(
+                film.getId(),
+                film.getTitle(),
+                film.getSynopsis(),
+                film.getDurationMinutes(),
+                film.getAgeRating(),
+                film.getReleaseDate(),
+                posterUrl,
+                film.getTrailerUrl(),
+                film.getStatus(),
+                film.getGenres().stream().map(GenreResponse::new).toList()
+        );
     }
 }
