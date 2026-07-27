@@ -36,15 +36,17 @@ public class User {
     @Column(name = "password", nullable = false, length = 255)
     private String password;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "role", nullable = false, columnDefinition = "user_role")
-    private UserRole role;
+    private UserRole role = UserRole.CUSTOMER;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "status", nullable = false, columnDefinition = "user_status")
-    private UserStatus status;
+    private UserStatus status = UserStatus.PENDING;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

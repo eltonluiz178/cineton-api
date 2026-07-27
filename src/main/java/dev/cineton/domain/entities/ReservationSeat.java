@@ -32,10 +32,11 @@ public class ReservationSeat {
     @JoinColumn(name = "session_seat_id", nullable = false)
     private SessionSeat sessionSeat;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "ticket_type", nullable = false, columnDefinition = "ticket_type")
-    private TicketType ticketType;
+    private TicketType ticketType = TicketType.NORMAL;
 
     @Column(name = "unit_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal unitPrice;

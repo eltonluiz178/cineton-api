@@ -34,10 +34,11 @@ public class SessionSeat {
     @JoinColumn(name = "seat_id", nullable = false)
     private Seat seat;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "status", nullable = false, columnDefinition = "session_seat_status")
-    private SessionSeatStatus status;
+    private SessionSeatStatus status = SessionSeatStatus.AVAILABLE;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

@@ -37,10 +37,11 @@ public class Reservation {
     @Column(name = "total", nullable = false, precision = 10, scale = 2)
     private BigDecimal total;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "status", nullable = false, columnDefinition = "reservation_status")
-    private ReservationStatus status;
+    private ReservationStatus status = ReservationStatus.PENDING_PAYMENT;
 
     @Column(name = "reserved_at", nullable = false)
     private OffsetDateTime reservedAt;

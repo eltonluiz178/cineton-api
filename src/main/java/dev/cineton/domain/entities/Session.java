@@ -44,10 +44,11 @@ public class Session {
     @Column(name = "base_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal basePrice;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "status", nullable = false, columnDefinition = "session_status")
-    private SessionStatus status;
+    private SessionStatus status = SessionStatus.SCHEDULED;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
