@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -62,7 +63,7 @@ public class FilmController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{id}/poster")
+    @PostMapping(value = "/{id}/poster", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Upload do poster", description = "Faz o upload do poster do filme")
     @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE')")
     public ResponseEntity<FilmResponse> uploadPoster(@PathVariable UUID id, @RequestParam("file") MultipartFile file) {
