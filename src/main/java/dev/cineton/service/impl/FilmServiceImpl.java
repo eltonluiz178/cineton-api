@@ -1,12 +1,14 @@
 package dev.cineton.service.impl;
 
 import dev.cineton.domain.entities.Film;
+import dev.cineton.domain.entities.Genre;
 import dev.cineton.dto.request.CreateFilmRequest;
 import dev.cineton.dto.request.UpdateFilmRequest;
 import dev.cineton.dto.response.FilmResponse;
 import dev.cineton.exceptions.CreateEntityException;
 import dev.cineton.exceptions.NotFoundException;
 import dev.cineton.repository.FilmRepository;
+import dev.cineton.repository.GenreRepository;
 import dev.cineton.service.FilmService;
 import dev.cineton.service.MinioService;
 import lombok.AllArgsConstructor;
@@ -25,6 +27,7 @@ import java.util.UUID;
 public class FilmServiceImpl implements FilmService {
     private final FilmRepository filmRepository;
     private final MinioService minioService;
+    private final GenreRepository genreRepository;
 
     @Value("${minio.bucket-name}")
     private String bucketName;
@@ -43,6 +46,8 @@ public class FilmServiceImpl implements FilmService {
                 .releaseDate(request.releaseDate())
                 .trailerUrl(request.trailerUrl())
                 .build();
+
+        newFilm = linkGenre(request.genreIds(), newFilm);
 
         return toResponse(filmRepository.save(newFilm));
     }
@@ -74,6 +79,8 @@ public class FilmServiceImpl implements FilmService {
         if (request.releaseDate() != null) oldFilm.setReleaseDate(request.releaseDate());
         if (request.trailerUrl() != null) oldFilm.setTrailerUrl(request.trailerUrl());
         if (request.status() != null) oldFilm.setStatus(request.status());
+
+        oldFilm = linkGenre(request.genreIds(), oldFilm);
 
         return toResponse(filmRepository.save(oldFilm));
     }
@@ -109,5 +116,18 @@ public class FilmServiceImpl implements FilmService {
             return new FilmResponse(film, posterUrl);
         }
         return new FilmResponse(film);
+    }
+
+    private Film linkGenre(List<UUID> genreIds, Film film) {
+        if (genreIds != null && !genreIds.isEmpty()) {
+            List<Genre> genres = genreRepository.findAllById(genreIds);
+
+            if (genres.size() != genreIds.size()) {
+                throw new NotFoundException("Um ou mais gêneros não foram encontrados.");
+            }
+
+            film.setGenres(genres);
+        }
+        return film;
     }
 }
