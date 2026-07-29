@@ -4,6 +4,7 @@ import dev.cineton.domain.enums.FilmStatus;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 public record UpdateFilmRequest(
@@ -24,5 +25,7 @@ public record UpdateFilmRequest(
 
         String trailerUrl,
 
-        FilmStatus status
+        FilmStatus status,
+
+        List<UUID> genreIds
 ) {}

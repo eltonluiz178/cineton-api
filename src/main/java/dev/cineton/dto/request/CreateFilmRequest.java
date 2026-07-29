@@ -3,6 +3,8 @@ package dev.cineton.dto.request;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 public record CreateFilmRequest(
         @NotBlank(message = "o título é necessário")
@@ -21,5 +23,7 @@ public record CreateFilmRequest(
         @Past(message = "Data de lançamento é inválida")
         LocalDate releaseDate,
 
-        String trailerUrl
+        String trailerUrl,
+
+        List<UUID> genreIds
 ) {}
