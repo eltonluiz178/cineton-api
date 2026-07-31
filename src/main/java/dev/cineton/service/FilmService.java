@@ -1,8 +1,8 @@
 package dev.cineton.service;
 
-import dev.cineton.dto.request.CreateFilmRequest;
-import dev.cineton.dto.request.UpdateFilmRequest;
-import dev.cineton.dto.response.FilmResponse;
+import dev.cineton.dto.film.request.CreateFilmRequest;
+import dev.cineton.dto.film.request.UpdateFilmRequest;
+import dev.cineton.dto.film.response.FilmResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

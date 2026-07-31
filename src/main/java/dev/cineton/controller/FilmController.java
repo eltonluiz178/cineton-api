@@ -1,8 +1,8 @@
 package dev.cineton.controller;
 
-import dev.cineton.dto.request.CreateFilmRequest;
-import dev.cineton.dto.request.UpdateFilmRequest;
-import dev.cineton.dto.response.FilmResponse;
+import dev.cineton.dto.film.request.CreateFilmRequest;
+import dev.cineton.dto.film.request.UpdateFilmRequest;
+import dev.cineton.dto.film.response.FilmResponse;
 import dev.cineton.service.FilmService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

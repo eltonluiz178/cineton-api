@@ -1,20 +1,20 @@
-package dev.cineton.dto.request;
+package dev.cineton.dto.film.request;
 
-import dev.cineton.domain.enums.FilmStatus;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-public record UpdateFilmRequest(
-
+public record CreateFilmRequest(
+        @NotBlank(message = "o título é necessário")
         @Size(max = 255, message = "O título deve ter no máximo 255 caracteres")
         String title,
 
         String synopsis,
 
-        @Min(value = 1, message = "A duração mínima do filme é 1 minuto")
+        @NotNull(message = "a duração do filme é obrigatório")
+        @Min(value = 1, message = "A duração mínima do filme é 1")
         Integer durationMinutes,
 
         @Size(max = 10, message = "A classificação etária poder possuir no máximo 10 caracteres")
@@ -24,8 +24,6 @@ public record UpdateFilmRequest(
         LocalDate releaseDate,
 
         String trailerUrl,
-
-        FilmStatus status,
 
         List<UUID> genreIds
 ) {}

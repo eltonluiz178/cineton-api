@@ -1,4 +1,4 @@
-package dev.cineton.dto.response;
+package dev.cineton.dto.genre.response;
 
 import dev.cineton.domain.entities.Genre;
 

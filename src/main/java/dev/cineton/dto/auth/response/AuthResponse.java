@@ -1,4 +1,4 @@
-package dev.cineton.dto.response;
+package dev.cineton.dto.auth.response;
 
 import dev.cineton.domain.entities.User;
 import dev.cineton.domain.enums.UserRole;

@@ -1,6 +1,6 @@
 package dev.cineton.exceptions.handlers;
 
-import dev.cineton.dto.response.ErrorResponse;
+import dev.cineton.dto.others.response.ErrorResponse;
 import dev.cineton.exceptions.AuthenticationException;
 import dev.cineton.exceptions.BusinessException;
 import dev.cineton.exceptions.CreateEntityException;

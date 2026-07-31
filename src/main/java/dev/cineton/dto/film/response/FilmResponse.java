@@ -1,7 +1,8 @@
-package dev.cineton.dto.response;
+package dev.cineton.dto.film.response;
 
 import dev.cineton.domain.entities.Film;
 import dev.cineton.domain.enums.FilmStatus;
+import dev.cineton.dto.genre.response.GenreResponse;
 
 import java.time.LocalDate;
 import java.util.List;

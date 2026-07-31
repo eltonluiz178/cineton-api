@@ -1,8 +1,8 @@
 package dev.cineton.service.impl;
 
 import dev.cineton.domain.entities.Genre;
-import dev.cineton.dto.request.CreateGenreRequest;
-import dev.cineton.dto.response.GenreResponse;
+import dev.cineton.dto.genre.request.CreateGenreRequest;
+import dev.cineton.dto.genre.response.GenreResponse;
 import dev.cineton.exceptions.CreateEntityException;
 import dev.cineton.exceptions.NotFoundException;
 import dev.cineton.repository.GenreRepository;
