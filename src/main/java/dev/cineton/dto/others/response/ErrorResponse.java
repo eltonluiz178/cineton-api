@@ -1,4 +1,4 @@
-package dev.cineton.dto.response;
+package dev.cineton.dto.others.response;
 
 import java.time.LocalDateTime;
 

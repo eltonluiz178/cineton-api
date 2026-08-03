@@ -1,7 +1,7 @@
 package dev.cineton.controller;
 
-import dev.cineton.dto.request.CreateGenreRequest;
-import dev.cineton.dto.response.GenreResponse;
+import dev.cineton.dto.genre.request.CreateGenreRequest;
+import dev.cineton.dto.genre.response.GenreResponse;
 import dev.cineton.service.GenreService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

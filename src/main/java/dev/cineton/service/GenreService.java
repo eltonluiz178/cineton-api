@@ -1,7 +1,7 @@
 package dev.cineton.service;
 
-import dev.cineton.dto.request.CreateGenreRequest;
-import dev.cineton.dto.response.GenreResponse;
+import dev.cineton.dto.genre.request.CreateGenreRequest;
+import dev.cineton.dto.genre.response.GenreResponse;
 
 import java.util.List;
 import java.util.UUID;

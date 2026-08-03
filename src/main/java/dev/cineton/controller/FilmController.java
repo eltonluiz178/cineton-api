@@ -1,18 +1,20 @@
 package dev.cineton.controller;
 
-import dev.cineton.dto.request.CreateFilmRequest;
-import dev.cineton.dto.request.UpdateFilmRequest;
-import dev.cineton.dto.response.FilmResponse;
+import dev.cineton.dto.film.request.CreateFilmRequest;
+import dev.cineton.dto.film.request.UpdateFilmRequest;
+import dev.cineton.dto.film.response.FilmResponse;
 import dev.cineton.service.FilmService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -59,5 +61,12 @@ public class FilmController {
         filmService.delete(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/{id}/poster", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Upload do poster", description = "Faz o upload do poster do filme")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE')")
+    public ResponseEntity<FilmResponse> uploadPoster(@PathVariable UUID id, @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(filmService.uploadPoster(id, file));
     }
 }

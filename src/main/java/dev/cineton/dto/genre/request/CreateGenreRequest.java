@@ -1,4 +1,4 @@
-package dev.cineton.dto.request;
+package dev.cineton.dto.genre.request;
 
 import jakarta.validation.constraints.NotBlank;
 

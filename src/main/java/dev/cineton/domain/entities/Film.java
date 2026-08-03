@@ -48,10 +48,11 @@ public class Film {
     @Column(name = "trailer_url", columnDefinition = "TEXT")
     private String trailerUrl;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "status", nullable = false, columnDefinition = "film_status")
-    private FilmStatus status;
+    private FilmStatus status = FilmStatus.COMING_SOON;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

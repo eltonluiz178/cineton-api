@@ -44,10 +44,11 @@ public class Payment {
     @Column(name = "paid_at", nullable = false)
     private OffsetDateTime paidAt;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "status", nullable = false, columnDefinition = "payment_status")
-    private PaymentStatus status;
+    private PaymentStatus status = PaymentStatus.PENDING;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

@@ -1,10 +1,10 @@
 package dev.cineton.controller;
 
-import dev.cineton.dto.request.ConfirmEmailRequest;
-import dev.cineton.dto.request.LoginRequest;
-import dev.cineton.dto.request.RegisterRequest;
-import dev.cineton.dto.request.ResendCodeRequest;
-import dev.cineton.dto.response.AuthResponse;
+import dev.cineton.dto.email.request.ConfirmEmailRequest;
+import dev.cineton.dto.auth.request.LoginRequest;
+import dev.cineton.dto.auth.request.RegisterRequest;
+import dev.cineton.dto.email.request.ResendCodeRequest;
+import dev.cineton.dto.auth.response.AuthResponse;
 import dev.cineton.service.AuthService;
 import dev.cineton.service.EmailConfirmationService;
 import dev.cineton.service.UserService;

@@ -1,4 +1,4 @@
-package dev.cineton.dto.request;
+package dev.cineton.dto.email.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
