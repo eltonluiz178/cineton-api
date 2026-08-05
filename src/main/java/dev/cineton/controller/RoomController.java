@@ -2,7 +2,9 @@ package dev.cineton.controller;
 
 import dev.cineton.dto.room.request.CreateRoomRequest;
 import dev.cineton.dto.room.response.RoomResponse;
+import dev.cineton.dto.seat.response.SeatResponse;
 import dev.cineton.service.RoomService;
+import dev.cineton.service.SeatService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -24,6 +26,7 @@ import java.util.UUID;
 public class RoomController {
 
     private final RoomService roomService;
+    private final SeatService seatService;
 
     @GetMapping
     @Operation(summary = "Retorna salas", description = "Retorna uma lista com todas as salas")
@@ -37,6 +40,12 @@ public class RoomController {
         return ResponseEntity.ok(roomService.findById(id));
     }
 
+    @GetMapping("/{id}/seats")
+    @Operation(summary = "Assentos da sala", description = "Retorna uma lista com todos assentos pelo id da sala")
+    public ResponseEntity<List<SeatResponse>> findSeatByRoomId(@PathVariable UUID id){
+        return ResponseEntity.ok(seatService.findByRoom(id));
+    }
+
     @PostMapping
     @Operation(summary = "Cria uma sala", description = "Faz a criação de uma sala")
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
@@ -46,7 +55,7 @@ public class RoomController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deleta sala", description = "Faz a deleção de uma sala apartir do id")
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable UUID id){
         roomService.delete(id);
 
