@@ -43,7 +43,7 @@ public class RoomController {
     @GetMapping("/{id}/seats")
     @Operation(summary = "Assentos da sala", description = "Retorna uma lista com todos assentos pelo id da sala")
     public ResponseEntity<List<SeatResponse>> findSeatByRoomId(@PathVariable UUID id){
-        return ResponseEntity.ok(seatService.findByRoom(id));
+        return ResponseEntity.ok(seatService.findByRoomId(id));
     }
 
     @PostMapping
